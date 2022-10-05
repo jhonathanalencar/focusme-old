@@ -5,6 +5,8 @@ import { interruptActivePomodoroAction, markCurrentPomodoroAsCompletedAction, re
 import { pomodoroReducer } from "../reducers/pomodoro/reducer";
 import { Pomodoro, PomodoroBreak, PomodoroState } from "../reducers/pomodoro/types";
 
+import notificationSound from '../assets/notification.mp3';
+
 interface PomodoroContextData{
   pomodoros: Pomodoro[];
   activePomodoro: Pomodoro | undefined;
@@ -47,7 +49,7 @@ export function PomodoroContextProvider({ children }: PomodoroContextProviderPro
 
   const { pomodoros, activePomodoro, pomodoroBreak } = state;
 
-  const notificationSong = new Audio('/src/assets/notification.mp3'); 
+  const notificationAudio = new Audio(notificationSound); 
 
   const [minutesPassed, setMinutesPassed] = useState(()=>{
     if(activePomodoro){
@@ -80,7 +82,7 @@ export function PomodoroContextProvider({ children }: PomodoroContextProviderPro
     dispatch(markCurrentPomodoroAsCompletedAction(activePomodoroId));
 
     setMinutesPassed(0);
-    notificationSong.play();
+    notificationAudio.play();
   }
 
   function setPomodoroBreak(pomodoroBreak: PomodoroBreak){
@@ -91,7 +93,7 @@ export function PomodoroContextProvider({ children }: PomodoroContextProviderPro
     dispatch(resetPomodoroCycleAction());
 
     setMinutesPassed(0);
-    notificationSong.play();
+    notificationAudio.play();
   }
 
   useEffect(() =>{
